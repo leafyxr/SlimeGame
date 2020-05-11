@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2cbbe45ef738f44db6be11d0d45ac5f, type: 3}
+  m_Name: Tutorial_Start
+  m_EditorClassIdentifier: 
+  Header: Tutorial
+  _InfoText: 'This is a demonstration of the games primary feature''s using the pretext
+    of a tutorial, read the signposts placed around the level by pressing the E key
+    to get information about different mechanics.
+
+
+    WASD keys are used for navigation.'
+  ConfirmText: Start Demo

@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 public class EventBox : MonoBehaviour {
 
     [SerializeField]
-    GameObject sceneButton;//Restart/Next Scene button
+    Text sceneButton;//Restart/Next Scene button
     [SerializeField]
-    GameObject quitButton;
+    Text quitButton;
     [SerializeField]
-    GameObject eventText;
+    Text eventText;
     [SerializeField]
     SceneLoader LoadingScreen;
     [SerializeField]
@@ -33,52 +33,31 @@ public class EventBox : MonoBehaviour {
         dataManager.dataSave();
         loadScene = currentScene;
         UI.SetActive(!paused);
-        //AudioSource[] allaudio = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
         if (paused) 
         {
-            /*foreach (AudioSource audio in allaudio)
-            {
-                audio.Pause();
-            }*/
             Time.timeScale = 0;
-            eventText.GetComponent<Text>().text = "Paused\nEsc to Resume";
+            eventText.text = "Paused\nEsc to Resume";
         }
         else
         {
-            /*foreach (AudioSource audio in allaudio)
-            {
-                audio.UnPause();
-            }*/
             Time.timeScale = 1;
         }
     }
     public void gameOver()
     {
-        /*AudioSource[] allaudio = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
-        foreach(AudioSource audio in allaudio)
-        {
-            audio.Pause();
-        }
-        GetComponent<AudioSource>().PlayOneShot(deathsound);*/
         Time.timeScale = 0;
         UI.SetActive(false);
+        eventText.text = "Game Over!\nPlease try again.";
         loadScene = currentScene;
     }
 
-    public void winGame(int Score)
+    public void winGame()
     {
         dataManager = FindObjectOfType<DataManager>().GetComponent<DataManager>();
         dataManager.dataSave();
-        /*AudioSource[] allaudio = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
-        foreach(AudioSource audio in allaudio)
-        {
-            audio.Pause();
-        }
-        GetComponent<AudioSource>().PlayOneShot(deathsound);*/
         Time.timeScale = 0;
         UI.SetActive(false);
-        eventText.GetComponent<Text>().text = "Quest Complete!\nGold Earned : " + Score;
-        sceneButton.GetComponent<Button>().interactable = false;
+        eventText.text = "Level Complete!";
     }
 
     public void ChangeScene()

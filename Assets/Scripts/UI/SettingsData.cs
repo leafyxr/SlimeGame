@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 
-
+//Stores game settings
 public class SettingsData
 {
     public float MasterVolume = 0;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2642520302774274969}
   - component: {fileID: 1688038611175966797}
   - component: {fileID: -8479782724785786270}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Apple (1)
   m_TagString: Consumable
   m_Icon: {fileID: 0}
@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

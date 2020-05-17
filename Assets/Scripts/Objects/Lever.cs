@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lever : MonoBehaviour
+//Not yet implemented
+public class Lever : Interactable
 {
     // Start is called before the first frame update
     void Start()

@@ -19,11 +19,15 @@ public class Settings : MonoBehaviour
     public Dropdown qualityDropdown;
 
     public AudioMixer audioMixer;
+
+    //Set start settings
     private void Start()
     {
+
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
 
+        //Construct Resolution dropdown
         int currentResolutionIndex = 0;
         List<string> options = new List<string>();
         for (int i = 0; i < resolutions.Length; i++)
@@ -40,12 +44,14 @@ public class Settings : MonoBehaviour
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
 
+        //Load data
         if (!loadData())
         {
             saveData();
         }
         setData(data);
     }
+    
 
     private bool loadData()
     {
@@ -66,6 +72,7 @@ public class Settings : MonoBehaviour
         return true;
     }
 
+    //save data to file
     public void saveData()
     {
         data.MasterVolume = MasterSlider.value;
@@ -87,6 +94,7 @@ public class Settings : MonoBehaviour
         return;
     }
 
+    //set data values
     public void setData(SettingsData settingsData)
     {
         data = settingsData;

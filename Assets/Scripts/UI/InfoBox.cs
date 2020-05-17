@@ -18,7 +18,6 @@ public class InfoBox : MonoBehaviour
     Text ConfirmText;
 
     private float timescale;
-    // Start is called before the first frame update
     void Start()
     {
         if (!isActive)
@@ -27,6 +26,7 @@ public class InfoBox : MonoBehaviour
         }
     }
 
+    //Displays Information UI Box
     public void DisplayInfo(InfoText info)
     {
         if (!isActive)

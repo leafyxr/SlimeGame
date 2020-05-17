@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Node Class for procedural generation
 public class Node
 {
     public Vector2 posistion;

@@ -8,7 +8,12 @@ public class Reticule : MonoBehaviour
     Transform reticule;
     //Speed of reticle spin
     public int spinSpeed = 30;
-    private Vector3 Point; 
+    public float maxDistance = 100;
+    private Vector3 Point;
+
+    [SerializeField]
+    LayerMask layerMask;
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +34,7 @@ public class Reticule : MonoBehaviour
         }
         
         //draw a ray from camera to mouse
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit2))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out RaycastHit hit2, maxDistance,layerMask))
         {
             Point = hit2.point;
             //set reticule at point

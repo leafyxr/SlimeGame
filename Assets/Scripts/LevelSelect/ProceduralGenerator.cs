@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProceduralGenerator : MonoBehaviour
 {
+    //World Size
     [SerializeField]
     int size_X = 4;
     [SerializeField]
@@ -11,48 +12,66 @@ public class ProceduralGenerator : MonoBehaviour
 
     Vector2 worldSize;
 
+    //List of potential nodes
     Node[,] nodes;
+    //List of used positions
     List<Vector2> usedPos = new List<Vector2>();
 
+    //Size of Grid
     int sizeX, sizeY;
+
+    //Number of nodes
     [SerializeField]
     int NodeNo = 10;
 
+    //Size of sprites(Seperation)
     public Vector2 spriteSize = new Vector2(10, 10);
     public GameObject Object;
 
     private void Start()
     {
+        //Set size
         worldSize = new Vector2(size_X, size_Y);
 
+        //Reset node number if too large
         if (NodeNo >= (worldSize.x * 2) * (worldSize.y * 2))
         {
             NodeNo = Mathf.RoundToInt((worldSize.x * 2) * (worldSize.y * 2));
         }
         sizeX = Mathf.RoundToInt(worldSize.x);
         sizeY = Mathf.RoundToInt(worldSize.y);
+        //Generate Nodes
         Generate();
+        //Set Connections
         SetDoors();
+        //Render
         Draw();
     }
 
+    //Generate Nodes
     void Generate()
     {
+        //Create empty nodes
         nodes = new Node[sizeX * 2, sizeY * 2];
+
+        //Create starting node
         Vector2 curPos = Vector2.zero;
         nodes[sizeX, sizeY] = new Node(curPos, 1);
         usedPos.Insert(0, curPos);
 
+        //Create rest of nodes
         for(int i = 0; i < NodeNo-1; i++)
         {
             curPos = selectPos();
             Debug.Log("Connections : " + checkAdjacenciesofAdjacencies(curPos));
+            //Regen if more than 1 other connection
             if (checkAdjacenciesofAdjacencies(curPos) > 1)
             {
                 int a = 0;
                 int r = (int)Random.Range(1, 3);
                 if (r == 3) r = (int)Random.Range(1, 3);
                 Debug.Log("Retry #1 - Target : " + r);
+                //Regen Node until correct number of adjacenies
                 while (checkAdjacenciesofAdjacencies(curPos) != r && a < 200)
                 {
                     curPos = selectPos();
@@ -61,24 +80,29 @@ public class ProceduralGenerator : MonoBehaviour
                 Debug.Log("Connections : " + checkAdjacenciesofAdjacencies(curPos) + " Target : " + r + " | Attempts :" + a);
                 
             }
+            //Create new node
             nodes[(int)curPos.x + sizeX, (int)curPos.y + sizeY] = new Node(curPos, 0);
+            //Add to Used
             usedPos.Insert(0, curPos);
         }
     }
 
     enum direction { Up, Down, Left, Right };
 
+
     Vector2 selectPos()
     {
         int x = 0, y = 0;
         Vector2 currPos = Vector2.zero;
 
+        //Randomly selects a node based on the last one generated
         do
         {
             int index = Mathf.RoundToInt(Random.value * (usedPos.Count - 1));
             x = (int)usedPos[index].x;
             y = (int)usedPos[index].y;
 
+            //randomly selects a direction
             direction dir = (direction)Random.Range(0, 3);
             switch (dir)
             {
@@ -97,6 +121,7 @@ public class ProceduralGenerator : MonoBehaviour
             }
             currPos = new Vector2(x, y);
         }
+        //Continues until an empty position is found
         while (usedPos.Contains(currPos) || x>=sizeX || x<-sizeX || y >=sizeY || y<-sizeY);
         return currPos;
     }
@@ -112,6 +137,7 @@ public class ProceduralGenerator : MonoBehaviour
         return i;
     }
 
+    //Returns highest Number of Adjaciencies on adjacent nodes
     int checkAdjacenciesofAdjacencies(Vector2 pos)
     {
         int a = 0;
@@ -162,6 +188,7 @@ public class ProceduralGenerator : MonoBehaviour
         return a;
     }
 
+    //Sets nodes connections
     void SetDoors()
     {
         for (int x = 0; x < sizeX*2; x++)
@@ -190,15 +217,18 @@ public class ProceduralGenerator : MonoBehaviour
         }
     }
     
+    //Draw nodes
     void Draw()
     {
         foreach (Node node in nodes)
         {
+            //Set Position
             if (node == null) continue;
             Vector2 pos = node.posistion;
             pos.x *= spriteSize.x;
             pos.y *= spriteSize.y;
 
+            //Generate sprite
             SpriteSelector spriteSelector = Instantiate(Object as GameObject, pos, Quaternion.identity).GetComponent<SpriteSelector>();
             spriteSelector.id = node.ID;
             spriteSelector.up = node.doorTop;

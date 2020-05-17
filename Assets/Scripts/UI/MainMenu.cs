@@ -5,16 +5,22 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
-    public string LoadScene;
+
+    public string[] LoadScene;
+
     [SerializeField]
     private GameObject Settings;
+
     [SerializeField]
     private DataManager dataManager;
+
     [SerializeField]
     private GameObject MenuObject;
+
     [SerializeField]
     private SceneLoader sceneLoader;
-    // Use this for initialization
+
+
     void Start () {
         MenuObject.SetActive(true);
         Settings.SetActive(false);
@@ -24,10 +30,16 @@ public class MainMenu : MonoBehaviour {
     private void Update()
     {
     }
-    public void StartButton()
+    public void StartButton1()
     {
         MenuObject.SetActive(false);
-        sceneLoader.LoadScene(LoadScene);
+        sceneLoader.LoadScene(LoadScene[0]);
+    }
+
+    public void StartButton2()
+    {
+        MenuObject.SetActive(false);
+        sceneLoader.LoadScene(LoadScene[1]);
     }
 
     public void exitGame()

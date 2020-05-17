@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour {
     private Animator animator; //Animator Componenet
 
     GameObject currentSelection;
+    [SerializeField]
+    float ScanRange = 0.5f;
 
     [SerializeField]
     Transform reticle; // Aiming Reticle
@@ -94,6 +96,8 @@ public class PlayerController : MonoBehaviour {
             {
                 if (currentSelection != null)
                 {
+
+                    //Carry Selected object
                     if (currentSelection.CompareTag("Carryable") && !Carrying)
                     {
                         Carrying = true;
@@ -148,6 +152,20 @@ public class PlayerController : MonoBehaviour {
         return true;
     }
 
+    //Damages the player
+    public bool damagePlayer(int damage)
+    {
+        if (!modSlime(-damage))
+        {
+            FindObjectOfType<GameManager>().GetComponent<GameManager>().gameOver();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void FixedUpdate() //Runs every Physics pass
     {
         //Checks if player is grounded
@@ -160,6 +178,16 @@ public class PlayerController : MonoBehaviour {
         {
             animator.SetBool("Walking", true);
             transform.rotation = Quaternion.LookRotation(moveDir, Vector3.up);
+            //if grounded move player at full speed
+            if (grounded)
+            {
+                moveDir *= speed * Time.deltaTime;
+            }
+            //else move at a slower speed
+            else
+            {
+                moveDir *= speed * 0.4f * Time.deltaTime;
+            }
         }
         //Else disable walk animation
         else
@@ -167,29 +195,21 @@ public class PlayerController : MonoBehaviour {
             moveDir = Vector3.zero;
             animator.SetBool("Walking", false);
         }
-        //if grounded move player at full speed
-        if (grounded)
-        {
-            moveDir *= speed * Time.deltaTime;
-        }
-        //else move at a slower speed
-        else
-        {
-            moveDir *= speed * 0.4f * Time.deltaTime;
-        }
+        
         //Add movement to rigidbody component
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.velocity += moveDir;
+        rigidbody.AddForce(Vector3.up * 0.8f);
 
         if (Carrying)
         {
             Carry();
         }
 
-        float ScanRange = 0.5f ;
+
         //Scan for all physics objects in range 
-        
-        Collider[] Hits = Physics.OverlapSphere(transform.position, GetComponent<CapsuleCollider>().radius + ScanRange);
+
+        Collider[] Hits = Physics.OverlapSphere(transform.position, ScanRange);
         //Iterate through scan results and Interact with the first Hit
         bool selection = false;
         foreach (Collider hit in Hits)
@@ -210,32 +230,32 @@ public class PlayerController : MonoBehaviour {
 
                         currentSelection = hit.gameObject;
                         addOutline(currentSelection.GetComponent<MeshRenderer>());
-
                     }
                 }
             }
         }
 
-        if (!selection)
-        {
-            if (currentSelection != null)
-            {
-                removeOutline(currentSelection.GetComponent<MeshRenderer>());
-                currentSelection = null;
-            }
+        if (!selection && currentSelection != null)
+        { 
+            removeOutline(currentSelection.GetComponent<MeshRenderer>());
+            currentSelection = null;
         }
     }
 
     void addOutline(MeshRenderer mr)
     {
+        //Check for empty material slot
         if (ReferenceEquals(mr.materials[mr.materials.Length - 1],null))
         {
             mr.materials[mr.materials.Length - 1] = Outline;
             return;
         }
+
+        //Create array of materials
         Material[] m = new Material[mr.materials.Length + 1];
         int i = 0;
 
+        //add all existing materials to array
         foreach (Material mat in mr.materials)
         {
             
@@ -243,20 +263,25 @@ public class PlayerController : MonoBehaviour {
             i++;
         }
 
+        //add outline to the end
         m[i] = Outline;
 
+        //set new material array
         mr.materials = m;
     }
 
     void removeOutline(MeshRenderer mr)
     {
+        //New Material Array but smaller than the original
         Material[] m = new Material[mr.materials.Length - 1];
 
+        //Add all old materials to new array
         for (int i = 0; i < m.Length; i++)
         {
 
             m[i] = mr.materials[i];
         }
+        //set new array
         mr.materials = m;
     }
 
@@ -280,6 +305,7 @@ public class PlayerController : MonoBehaviour {
 
     void fireCarryable()
     {
+        //Calulate Direction
         Vector3 target = reticle.GetComponent<Reticule>().getPoint();
         Vector3 curPos = carryLocation.transform.position;
         Vector3 direction = target - curPos;
@@ -287,14 +313,17 @@ public class PlayerController : MonoBehaviour {
         Carrying = false;
         Rigidbody body = currentCarryObject.GetComponent<Rigidbody>();
 
+        //Calculate Distance
         float distance = Vector3.Distance(body.transform.position, target);
-
+        //Keep distance capped at a maximum
         if (distance > maxDistance) distance = maxDistance;
 
+        //Calculate force
         float force = throwForce * SlimeLevel / MaxSlime * distance / maxDistance;
+        //Add Upwards force
+        direction.y += 0.5f;
 
-        direction.y = 0.5f;
-
+        //Apply Force
         body.AddForce(direction * force);
         body.mass = carryMass;
 

@@ -9,6 +9,7 @@ TagManager:
   - Carryable
   - Sign
   - Interactable
+  - Projectile
   layers:
   - Default
   - TransparentFX

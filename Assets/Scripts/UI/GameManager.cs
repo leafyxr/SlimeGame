@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     float AutoSaveDelay = 200;
     bool paused = false;
 
+    bool active = true;
+
     [SerializeField]
     GameObject[] Milestones;
     
@@ -38,20 +40,39 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Pause") || paused && Input.GetButtonDown("UnPause"))
+        if (active)
         {
-            paused = !paused;
-            eventBox.gameObject.SetActive(paused);
-            eventBox.pauseGame(paused);
-        }
+            if (Input.GetButtonDown("Pause") || paused && Input.GetButtonDown("UnPause"))
+            {
+                paused = !paused;
+                eventBox.gameObject.SetActive(paused);
+                eventBox.pauseGame(paused);
+            }
+        
+            clock += Time.deltaTime;
 
-        clock += Time.deltaTime;
-
-        if (clock > AutoSaveDelay)
-        {
-            dataManager.dataSave();
+            if (clock > AutoSaveDelay)
+            {
+                dataManager.dataSave();
+            }
         }
     }
+
+    public void gameOver()
+    {
+        active = false;
+        eventBox.gameObject.SetActive(true);
+        eventBox.gameOver();
+    }
+
+    public void win()
+    {
+        active = false;
+        eventBox.gameObject.SetActive(true);
+        dataManager.dataSave();
+        eventBox.winGame();
+    }
+
 
     public bool setMilestone(GameObject gameObject, bool activated)
     {

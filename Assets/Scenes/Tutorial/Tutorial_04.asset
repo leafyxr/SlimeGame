@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Tutorial_04
   m_EditorClassIdentifier: 
   Header: Tutorial #4
-  _InfoText: WIP
+  _InfoText: "See this target? \nTry firing a slimeball at it. "
   ConfirmText: Continue

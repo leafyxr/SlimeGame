@@ -2,25 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Selects relevent sprite for a node
 public class SpriteSelector : MonoBehaviour
 {
+    //Sprite Map
     public MapSprites sprites;
+    //Connection Direction
     public bool up, down, left, right;
+    //Sprite ID
     public int id;
 
+    //Colour
     public Color color, SelectedColor;
     Color MainColor;
 
+    //Renderer
     SpriteRenderer spriteRenderer;
 
+    //On Start
     private void Start()
     {
+
         spriteRenderer = GetComponent<SpriteRenderer>();
+        //Set Colour
         MainColor = color;
+        //Select Sprite
         select();
+        //Add Collider
         gameObject.AddComponent<PolygonCollider2D>();
     }
 
+    //Select Sprite based on connections
     void select()
     {
         if (up && down && left && right) spriteRenderer.sprite = sprites.C;

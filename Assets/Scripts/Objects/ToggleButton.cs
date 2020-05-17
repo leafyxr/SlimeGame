@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleButton : MonoBehaviour
+
+//NOT YET IMPLEMENTED
+public class ToggleButton : Interactable
 {
     // Start is called before the first frame update
     void Start()

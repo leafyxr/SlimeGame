@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+//Loading screen between scenes
 public class SceneLoader : MonoBehaviour {
 
     [SerializeField]
@@ -9,12 +11,14 @@ public class SceneLoader : MonoBehaviour {
     [SerializeField]
     private Text LoadProgressText;
     
+    //load specified scene
     public void LoadScene(string SceneName)
     {
         LoadingScreen.SetActive(true);
         StartCoroutine(LoadAsync(SceneName));
     }
 
+    //Load next scene in the background while load screen displays a progress number
     IEnumerator LoadAsync(string SceneName)
     {
         AsyncOperation LoadOperation = SceneManager.LoadSceneAsync(SceneName);

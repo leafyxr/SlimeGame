@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour {
         if (Time.timeScale != 0)
         {
             //If fire button pressed
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire"))
             {
                 if (Carrying)
                 {
